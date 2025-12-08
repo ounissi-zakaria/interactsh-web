@@ -22,7 +22,7 @@ const RequestsTableWrapper = ({
   handleRowClick,
   selectedInteraction,
   filter,
-}: RequestsTableWrapperP): JSX.Element => (
+}: RequestsTableWrapperP) => (
   <div className="requests_table_container">
     <ErrorBoundary
       FallbackComponent={({ resetErrorBoundary }) => (
