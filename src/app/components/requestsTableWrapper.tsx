@@ -1,16 +1,14 @@
-import React, { Suspense } from "react";
+'use client';
 
-import { ErrorBoundary } from "react-error-boundary";
-
-import Data from "lib/types/data";
-import Filter from "lib/types/filter";
-
-import RequestsTable from "../../components/requestsTable";
+import React, { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
+import RequestsTable from '@/components/requestsTable';
+import { Data } from '@/lib/types/data';
+import { Filter } from '@/lib/types/filter';
 import {
   RepoSidebarListFallback,
   RepoSidebarListErrorFallback,
-} from "../../helpers/fallback-loaders";
-import "./styles.scss";
+} from '@/helpers/fallback-loaders';
 
 interface RequestsTableWrapperP {
   data: Data[];
@@ -44,3 +42,4 @@ const RequestsTableWrapper = ({
 );
 
 export default RequestsTableWrapper;
+
