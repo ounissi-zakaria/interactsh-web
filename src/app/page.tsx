@@ -315,7 +315,7 @@ const HomePage = () => {
 
   return (
     <ThemeProvider theme={getTheme(storedData.theme)}>
-      <GlobalStyles />
+      <GlobalStyles theme={getTheme(storedData.theme)} />
       <div className="main">
         <AppLoader isRegistered={isRegistered} mode={loaderAnimationMode} />
         {aboutPopupVisibility && (

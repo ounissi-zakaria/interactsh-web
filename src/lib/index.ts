@@ -134,7 +134,7 @@ export const deregister = (
     'correlation-id': correlationId,
   };
 
-  const headers = token && token !== ''
+  const headers: Record<string, string> = token && token !== ''
     ? { 'Content-Type': 'application/json', Authorization: token }
     : { 'Content-Type': 'application/json' };
 
@@ -266,7 +266,7 @@ export const poll = (
   handleResetPopupDialogVisibility: () => void,
   handleCustomHostDialogVisibility: () => void
 ): Promise<PolledData> => {
-  const headers = token !== '' ? { Authorization: token } : {};
+  const headers: Record<string, string> = token !== '' ? { Authorization: token } : {};
   
   return fetch(`https://${host}/poll?id=${correlationId}&secret=${secretKey}`, {
     method: 'GET',
