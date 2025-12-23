@@ -1,37 +1,29 @@
-'use client';
+import React, { useState } from "react";
 
-import React, { useState } from 'react';
-import Link from 'next/link';
-import { NotificationOutlined } from '@ant-design/icons';
-import {
-  DeleteIcon,
-  DownloadIcon,
-  SwitchIcon,
-  ThemeBlueButtonIcon,
-  ThemeDarkButtonIcon,
-  ThemeSynthButtonIcon,
-} from '@/components/icons';
-import NotificationsPopup from '@/components/notificationsPopup';
-import ResetPopup from '@/components/resetPopup';
-import ToggleBtn from '@/components/toggleBtn';
-import CustomHost from '@/components/customHost';
-import { handleDataExport } from '@/lib';
-import { getStoredData, writeStoredData } from '@/lib/localStorage';
-import { ThemeName, showThemeName } from '@/theme';
-import './styles.scss';
+import { NotificationOutlined } from "@ant-design/icons";
+import { matchConfig } from "@babakness/exhaustive-type-checking";
 
-const themeIcon = (t: ThemeName) => {
-  switch (t) {
-    case 'dark':
-      return <ThemeDarkButtonIcon />;
-    case 'synth':
-      return <ThemeSynthButtonIcon />;
-    case 'blue':
-      return <ThemeBlueButtonIcon />;
-    default:
-      return <ThemeDarkButtonIcon />;
-  }
-};
+import { ReactComponent as DeleteIcon } from "assets/svg/delete.svg";
+import { ReactComponent as DownloadIcon } from "assets/svg/download.svg";
+import { ReactComponent as SwitchIcon } from "assets/svg/switch.svg";
+import { ReactComponent as ThemeBlueButtonIcon } from "assets/svg/theme_blue_button.svg";
+import { ReactComponent as ThemeDarkButtonIcon } from "assets/svg/theme_dark_button.svg";
+import { ReactComponent as ThemeSynthButtonIcon } from "assets/svg/theme_synth_button.svg";
+import NotificationsPopup from "components/notificationsPopup";
+import ResetPopup from "components/resetPopup";
+import ToggleBtn from "components/toggleBtn";
+import { handleDataExport } from "lib";
+import { getStoredData, writeStoredData } from "lib/localStorage";
+import { ThemeName, showThemeName } from "theme";
+import "./styles.scss";
+
+import CustomHost from "../customHost";
+
+const themeIcon = matchConfig<ThemeName>()({
+  dark: () => <ThemeDarkButtonIcon />,
+  synth: () => <ThemeSynthButtonIcon />,
+  blue: () => <ThemeBlueButtonIcon />,
+});
 
 interface HeaderP {
   handleThemeSelection: (t: ThemeName) => void;
@@ -68,8 +60,8 @@ const Header = ({
 
   const isThemeSelected = (t: ThemeName) => ThemeName.eq.equals(t, theme);
   const themeButtonStyle = (t: ThemeName) =>
-    `${isSelectorVisible && '__selector_visible'} ${isThemeSelected(t) && '__selected'} ${
-      !isSelectorVisible && '__without_bg'
+    `${isSelectorVisible && "__selector_visible"} ${isThemeSelected(t) && "__selected"} ${
+      !isSelectorVisible && "__without_bg"
     }`;
 
   const ThemeButton = ({ theme: t }: { theme: ThemeName }) => (
@@ -80,14 +72,16 @@ const Header = ({
   );
 
   const data = getStoredData();
-  const [inputData, setInputData] = useState({
-    responseExport: data.responseExport,
+  const [inputData, setInputData] = useState<any>({
+    responseExport: data.responseExport
   });
 
-  const handleToggleBtn = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleToggleBtn = (e: any) => {
+
     const currentStoredData = getStoredData();
-    setInputData({ ...inputData, responseExport: e.target.checked });
-    writeStoredData({ ...currentStoredData, responseExport: e.target.checked });
+
+    setInputData({ ...inputData, responseExport: e.target.checked});
+    writeStoredData({ ...currentStoredData, responseExport: e.target.checked});
   };
 
   return (
@@ -123,7 +117,7 @@ const Header = ({
           Reset
         </button>
         <button type="button" title="Notifications" onClick={handleNotificationsDialogVisibility}>
-          <NotificationOutlined style={{ marginRight: '10px' }} />
+          <NotificationOutlined style={{marginRight: '10px'}} />
           Notifications
         </button>
         <button type="button" title="Export" onClick={handleDataExport}>
@@ -131,7 +125,7 @@ const Header = ({
           Export
         </button>
         <div className="vertical_bar" />
-        <Link href="/terms">Terms</Link>
+        <a href="/#/terms">Terms</a>
         <button type="button" onClick={handleAboutPopupVisibility}>
           About
         </button>
