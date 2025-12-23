@@ -1,22 +1,26 @@
-@mixin for-size($size) {
-  @if $size == xsmall {
-    @media (max-width: 480px) {
+@mixin for-size($range) {
+  $small: 600px;
+  $medium: 768px;
+  $large: 992px;
+  $extra-large: 1200px;
+  @if $range == xsmall {
+    @media only screen and (max-width: #{$small }) {
       @content;
     }
-  } @else if $size == small {
-    @media (max-width: 768px) {
+  } @else if $range == small {
+    @media only screen and (min-width: $small) {
       @content;
     }
-  } @else if $size == medium {
-    @media (max-width: 1024px) {
+  } @else if $range == medium {
+    @media only screen and (min-width: $medium) {
       @content;
     }
-  } @else if $size == large {
-    @media (max-width: 1200px) {
+  } @else if $range == large {
+    @media only screen and (min-width: $large) {
       @content;
     }
-  } @else if $size == xlarge {
-    @media (min-width: 1201px) {
+  } @else if $range == xlarge {
+    @media only screen and (min-width: $extra-large) {
       @content;
     }
   }
