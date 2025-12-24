@@ -200,7 +200,7 @@ const HomePage = () => {
 
       setIsRegistered(true);
       if (pollData?.data?.length !== 0 && !pollData.error) {
-        if (aesKey === '' && pollData.aes_key) {
+        if (pollData.aes_key) {
           decryptedAESKey = decryptAESKey(privateKey, pollData.aes_key);
         }
         const processedData = await processData(decryptedAESKey, pollData);
@@ -240,7 +240,8 @@ const HomePage = () => {
           .map((item) => item);
         setFilteredData([...newData]);
       }
-    } catch {
+    } catch (error) {
+      console.error(error);
       setLoaderAnimationMode('server_error');
       setIsRegistered(false);
     }
