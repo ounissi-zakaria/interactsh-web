@@ -113,9 +113,9 @@ const HomePage = () => {
 
   const handleNoteInputChange: React.ChangeEventHandler<HTMLTextAreaElement> = (e) => {
     const { selectedTab, tabs } = storedData;
-    const index = tabs.findIndex((item) => Tab.eq.equals(item, selectedTab));
+    const index = tabs.findIndex((item) => item === selectedTab);
     const currentTab = tabs[index];
-    const filteredTabList = tabs.filter((item) => !Tab.eq.equals(item, selectedTab));
+    const filteredTabList = tabs.filter((item) => item !== selectedTab);
     filteredTabList.push({ ...currentTab, note: e.target.value });
     setStoredData({
       ...storedData,
@@ -131,8 +131,8 @@ const HomePage = () => {
 
   const handleDeleteTab = (tab: Tab) => {
     const { tabs } = storedData;
-    const index = tabs.findIndex((value) => Tab.eq.equals(value, tab));
-    const filteredTempTabsList = tabs.filter((value) => !Tab.eq.equals(value, tab));
+    const index = tabs.findIndex((value) => value === tab);
+    const filteredTempTabsList = tabs.filter((value) => value !== tab);
     const tempTabsData = storedData.data;
     const filteredTempTabsData = tempTabsData.filter(
       (value) => value['unique-id'] !== tab['unique-id']
@@ -149,9 +149,9 @@ const HomePage = () => {
 
   const handleTabRename: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const tempTabsList = storedData.tabs;
-    const index = tempTabsList.findIndex((item) => Tab.eq.equals(item, storedData.selectedTab));
+    const index = tempTabsList.findIndex((item) => item === storedData.selectedTab);
     const filteredTabList = tempTabsList.filter(
-      (item) => !Tab.eq.equals(item, storedData.selectedTab)
+      (item) => item !== storedData.selectedTab
     );
     const tempTab = { ...tempTabsList[index], name: e.target.value };
 
@@ -200,7 +200,7 @@ const HomePage = () => {
 
       setIsRegistered(true);
       if (pollData?.data?.length !== 0 && !pollData.error) {
-        if (aesKey === '' && pollData.aes_key) {
+        if (pollData.aes_key) {
           decryptedAESKey = decryptAESKey(privateKey, pollData.aes_key);
         }
         const processedData = await processData(decryptedAESKey, pollData);
@@ -240,7 +240,8 @@ const HomePage = () => {
           .map((item) => item);
         setFilteredData([...newData]);
       }
-    } catch {
+    } catch (error) {
+      console.error(error);
       setLoaderAnimationMode('server_error');
       setIsRegistered(false);
     }
@@ -306,7 +307,7 @@ const HomePage = () => {
   }, [storedData.selectedTab, isClient, processPolledData]);
 
   const selectedTabsIndex = storedData.tabs.findIndex((item) =>
-    Tab.eq.equals(item, storedData.selectedTab)
+    item === storedData.selectedTab
   );
 
   if (!isClient) {
@@ -424,7 +425,7 @@ const HomePage = () => {
                       <button
                         type="button"
                         className={
-                          View.eq.equals(storedData.view, 'request')
+                          storedData.view === 'request'
                             ? '__selected_req_res_button'
                             : undefined
                         }
@@ -435,7 +436,7 @@ const HomePage = () => {
                       <button
                         type="button"
                         className={
-                          View.eq.equals(storedData.view, 'response')
+                          storedData.view === 'response'
                             ? '__selected_req_res_button'
                             : undefined
                         }
@@ -446,14 +447,14 @@ const HomePage = () => {
                     </div>
                     <SideBySideIcon
                       style={{
-                        fill: View.eq.equals(storedData.view, 'side_by_side') ? '#ffffff' : '#4a4a4a',
+                        fill: storedData.view === 'side_by_side' ? '#ffffff' : '#4a4a4a',
                         cursor: 'pointer',
                       }}
                       onClick={() => handleChangeView('side_by_side')}
                     />
                     <UpDownIcon
                       style={{
-                        fill: View.eq.equals(storedData.view, 'up_and_down') ? '#ffffff' : '#4a4a4a',
+                        fill: storedData.view === 'up_and_down' ? '#ffffff' : '#4a4a4a',
                         cursor: 'pointer',
                       }}
                       onClick={() => handleChangeView('up_and_down')}

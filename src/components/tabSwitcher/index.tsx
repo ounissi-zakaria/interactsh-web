@@ -56,14 +56,14 @@ const TabSwitcher = ({
               key={item['unique-id']}
               onKeyUp={handleTabRenameDone}
               onClick={() =>
-                !Tab.eq.equals(selectedTab, item) ? handleTabButtonClickTemp(item) : undefined
+                selectedTab !== item ? handleTabButtonClickTemp(item) : undefined
               }
               onDoubleClick={() => handleTabButtonDoubleClick(item['unique-id'])}
               className={`tab_button ${
-                Tab.eq.equals(selectedTab, item) && '__selected_tab_button'
+                selectedTab === item && '__selected_tab_button'
               }`}
             >
-              {isInputVisible && Tab.eq.equals(selectedTab, item) ? (
+              {isInputVisible && selectedTab === item ? (
                 <input
                   id={item['unique-id'].toString()}
                   value={item.name}

@@ -38,8 +38,22 @@
       height: 100%;
       width: 100%;
       overflow-y: scroll;
+      & > pre.language-http {
+        line-height: 10px !important;
+        code {
+          line-height: 10px !important;
+          & > span {
+            height: 10px !important;
+            padding-left: 0 !important;
+            &:first-child {
+              line-height: 24px !important;
+            }
+          }
+        }
+      }
       & > .default {
         color: #fcc28c;
+        line-height: 18px !important;
       }
       & > pre {
         text-shadow: none !important;

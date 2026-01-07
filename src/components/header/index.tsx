@@ -66,7 +66,7 @@ const Header = ({
 
   const setTheme = (t: ThemeName) => () => handleThemeSelection(t);
 
-  const isThemeSelected = (t: ThemeName) => ThemeName.eq.equals(t, theme);
+  const isThemeSelected = (t: ThemeName) => t === theme;
   const themeButtonStyle = (t: ThemeName) =>
     `${isSelectorVisible && '__selector_visible'} ${isThemeSelected(t) && '__selected'} ${
       !isSelectorVisible && '__without_bg'

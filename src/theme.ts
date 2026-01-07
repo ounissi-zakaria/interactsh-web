@@ -9,12 +9,6 @@ export interface Theme {
   lightBackground: string;
 }
 
-export const ThemeName = {
-  eq: {
-    equals: (a: ThemeName, b: ThemeName) => a === b,
-  },
-};
-
 export const showThemeName = {
   show: capitalize,
 };

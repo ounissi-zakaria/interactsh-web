@@ -15,11 +15,12 @@ interface RequestDetailsWrapperP {
 
 const RequestDetailsWrapper = (props: RequestDetailsWrapperP) => {
   const { selectedInteractionData, view } = props;
+  console.log(selectedInteractionData.protocol);
 
   return (
     <div
       className="detailed_request"
-      style={{ flexDirection: View.eq.equals(view, 'up_and_down') ? 'column' : 'row' }}
+      style={{ flexDirection: view === 'up_and_down' ? 'column' : 'row' }}
     >
       <ErrorBoundary
         FallbackComponent={({ resetErrorBoundary }) => (
@@ -27,15 +28,15 @@ const RequestDetailsWrapper = (props: RequestDetailsWrapperP) => {
         )}
       >
         <Suspense fallback={<IssuesListFallback />}>
-          {View.eq.equals(view, 'request') ||
-          Protocol.eq.equals(selectedInteractionData.protocol, 'smtp') ? (
+          {view === 'request' ||
+          selectedInteractionData.protocol === 'smtp' ? (
             <DetailedRequest
               view={view}
               data={`${selectedInteractionData['raw-request']}`}
               title="Request"
               protocol={selectedInteractionData.protocol}
             />
-          ) : View.eq.equals(view, 'response') ? (
+          ) : view === 'response' ? (
             <DetailedRequest
               view={view}
               data={`${selectedInteractionData['raw-response'] || ''}`}

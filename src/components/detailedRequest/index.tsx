@@ -26,8 +26,8 @@ const DetailedRequest = ({ title, data, view, protocol }: DetailedRequestP) => {
     <div
       className="detailed_request_container"
       style={{
-        width: View.eq.equals(view, 'side_by_side') ? '48%' : '100%',
-        marginBottom: View.eq.equals(view, 'side_by_side') ? '0' : '3rem',
+        width: view === 'side_by_side' ? '48%' : '100%',
+        marginBottom: view === 'side_by_side' ? '0' : '3rem',
       }}
     >
       <span>{title}</span>
@@ -36,14 +36,20 @@ const DetailedRequest = ({ title, data, view, protocol }: DetailedRequestP) => {
           Copy <CopyIcon />
         </button>
         <div className="pre_wrapper">
-          <pre>
+          <pre className={`${
+                protocol === 'http'
+                  ? 'language-http'
+                  : protocol === 'dns'
+                  ? 'default'
+                  : protocol === 'smtp' && 'default'
+              }`}>
             <code
               className={`${
-                Protocol.eq.equals(protocol, 'http')
+                protocol === 'http'
                   ? 'language-http'
-                  : Protocol.eq.equals(protocol, 'dns')
+                  : protocol === 'dns'
                   ? 'default'
-                  : Protocol.eq.equals(protocol, 'smtp') && 'default'
+                  : protocol === 'smtp' && 'default'
               }`}
             >
               {data}
