@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import Prism from 'prismjs';
 import 'prismjs/themes/prism-dark.css';
 import 'prismjs/components/prism-http';
@@ -18,8 +18,12 @@ interface DetailedRequestP {
 }
 
 const DetailedRequest = ({ title, data, view, protocol }: DetailedRequestP) => {
+  const codeRef = useRef<HTMLElement>(null);
+
   useEffect(() => {
-    Prism.highlightAll();
+    if (codeRef.current) {
+      Prism.highlightElement(codeRef.current);
+    }
   }, [data]);
 
   return (
@@ -36,21 +40,10 @@ const DetailedRequest = ({ title, data, view, protocol }: DetailedRequestP) => {
           Copy <CopyIcon />
         </button>
         <div className="pre_wrapper">
-          <pre className={`${
-                protocol === 'http'
-                  ? 'language-http'
-                  : protocol === 'dns'
-                  ? 'default'
-                  : protocol === 'smtp' && 'default'
-              }`}>
+          <pre className={protocol === 'http' ? 'language-http' : 'default'}>
             <code
-              className={`${
-                protocol === 'http'
-                  ? 'language-http'
-                  : protocol === 'dns'
-                  ? 'default'
-                  : protocol === 'smtp' && 'default'
-              }`}
+              ref={codeRef}
+              className={protocol === 'http' ? 'language-http' : 'default'}
             >
               {data}
             </code>
