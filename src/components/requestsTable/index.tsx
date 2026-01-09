@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useCallback, useMemo, useRef } from 'react';
+import React, { useEffect, useState, useCallback, useMemo, useRef, memo } from 'react';
 import { formatDistance } from 'date-fns';
 import { FilterIcon, FilterSelectedIcon } from '@/components/icons';
 import { getStoredData, writeStoredData } from '@/lib/localStorage';
@@ -17,7 +17,7 @@ interface RequestsTableP {
   filter: Filter;
 }
 
-const RequestsTable = ({ data, handleRowClick, selectedInteraction, filter }: RequestsTableP) => {
+const RequestsTable = memo(({ data, handleRowClick, selectedInteraction, filter }: RequestsTableP) => {
   const [filterDropdownVisibility, setFilterDropdownVisibility] = useState<boolean>(false);
   const [filterValue, setFilterValue] = useState<Filter>(filter);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -125,9 +125,9 @@ const RequestsTable = ({ data, handleRowClick, selectedInteraction, filter }: Re
       </tbody>
     </table>
   );
-};
+});
 
-const TableRow = React.memo(({ 
+const TableRow = memo(({ 
   item, 
   index, 
   total, 

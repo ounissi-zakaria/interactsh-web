@@ -1,6 +1,6 @@
 'use client';
 
-import React, { Suspense, useMemo } from 'react';
+import React, { Suspense, useMemo, memo } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import RequestsTable from '@/components/requestsTable';
 import { Data } from '@/lib/types/data';
@@ -17,7 +17,7 @@ interface RequestsTableWrapperP {
   filter: Filter;
 }
 
-const RequestsTableWrapper = ({
+const RequestsTableWrapper = memo(({
   data,
   handleRowClick,
   selectedInteraction,
@@ -43,7 +43,7 @@ const RequestsTableWrapper = ({
       </ErrorBoundary>
     </div>
   );
-};
+});
 
 export default RequestsTableWrapper;
 

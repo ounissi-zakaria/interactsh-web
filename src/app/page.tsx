@@ -31,7 +31,7 @@ import { StoredData } from '@/lib/types/storedData';
 import { Tab } from '@/lib/types/tab';
 import { View } from '@/lib/types/view';
 import { ThemeName, getTheme } from '@/theme';
-import { writeStoredData, getStoredData, defaultStoredData } from '@/lib/localStorage';
+import { writeStoredData, getStoredData, defaultStoredData, flushStoredData } from '@/lib/localStorage';
 import RequestDetailsWrapper from './components/requestDetailsWrapper';
 import RequestsTableWrapper from './components/requestsTableWrapper';
 import './styles.scss';
@@ -304,6 +304,40 @@ const HomePage = () => {
   }, [isClient]);
 
   const pollingIntervalRef = useRef<number | undefined>(undefined);
+  const isPageVisibleRef = useRef(true);
+
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      isPageVisibleRef.current = !document.hidden;
+      
+      if (document.hidden) {
+        if (pollingIntervalRef.current) {
+          window.clearInterval(pollingIntervalRef.current);
+          pollingIntervalRef.current = undefined;
+        }
+        flushStoredData();
+      } else if (isClient && storedData.tabs.length > 0) {
+        if (!pollingIntervalRef.current) {
+          processPolledData(); // Immediate poll on return
+          pollingIntervalRef.current = window.setInterval(() => {
+            processPolledData();
+          }, 4000);
+        }
+      }
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    const handleBeforeUnload = () => {
+      flushStoredData();
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [isClient, storedData.tabs.length, processPolledData]);
 
   useEffect(() => {
     if (!isClient || storedData.tabs.length === 0) return;
@@ -312,9 +346,11 @@ const HomePage = () => {
       window.clearInterval(pollingIntervalRef.current);
     }
 
-    pollingIntervalRef.current = window.setInterval(() => {
-      processPolledData();
-    }, 4000);
+    if (isPageVisibleRef.current) {
+      pollingIntervalRef.current = window.setInterval(() => {
+        processPolledData();
+      }, 4000);
+    }
 
     const tempFilteredData = storedData.data
       .filter((item) => item['unique-id'] === storedData.selectedTab['unique-id']);
@@ -333,13 +369,15 @@ const HomePage = () => {
     item === storedData.selectedTab
   );
 
+  const theme = useMemo(() => getTheme(storedData.theme), [storedData.theme]);
+
   if (!isClient) {
     return null;
   }
 
   return (
-    <ThemeProvider theme={getTheme(storedData.theme)}>
-      <GlobalStyles theme={getTheme(storedData.theme)} />
+    <ThemeProvider theme={theme}>
+      <GlobalStyles theme={theme} />
       <div className="main">
         <AppLoader isRegistered={isRegistered} mode={loaderAnimationMode} />
         {aboutPopupVisibility && (
