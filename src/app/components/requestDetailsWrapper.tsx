@@ -15,7 +15,6 @@ interface RequestDetailsWrapperP {
 
 const RequestDetailsWrapper = (props: RequestDetailsWrapperP) => {
   const { selectedInteractionData, view } = props;
-  console.log(selectedInteractionData.protocol);
 
   return (
     <div
